@@ -5,21 +5,22 @@ import session from "express-session";
 import createFileStore from 'session-file-store';
 import path from "path";
 import os  from 'os';
-
-
-import conn from './db/conn.js'
+import toughtRouter from './routes/toughtRouter.js' // Routes
+import conn from './db/conn.js'; //Banco
+import Tought from "./models/Tought.js"; // models
+import User from './models/User.js'; // models
+import ToughtController from "./controllers/ToughtController.js"; //controllers
 
 const FileStore = createFileStore(session);
 const app = express();
+
 
 //template engine
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 
 //resceber resposta do body
-app.use(express.urlencoded(
-    {extended: true}
-));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //public path
@@ -61,9 +62,15 @@ app.use((req, res, next)=> {
     next();
 })
 
+//Routes
+app.use('/toughts', toughtRouter);
 
+// exibi todos os pesamentos na pagina de inicair sem acessar o route
+app.get('/', ToughtController.showTought);
 
-conn.sync().then(()=> {
+conn.sync(
+    // {force: true}
+).then(()=> {
     app.listen(3000);
 }).catch((err)=> console.error(`Erro FOI AQUI ${err}`));
 
