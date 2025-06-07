@@ -1,0 +1,43 @@
+@media(max-width: 1030px) {
+    .navBar{
+        height: 4rem;
+        font-size: 0.8rem;
+        transition: 0.5s ease;
+        gap: 0;
+    }
+    .logoIMG {
+        width: 50px;
+        height: 50px;
+        margin-left: 4rem;
+
+    }
+    ul {
+        margin-right: 3rem;
+    }
+    .content {
+        width: 85vw;
+    }
+}
+
+@media(max-width: 960px) {
+    .navBar {
+        height: 3rem;
+        gap: 0;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navBar ul {
+        font-size: 0.6rem;
+        transition:  0.9s ease-in;
+    }
+
+    .logoIMG{
+       display: none;
+       transition:  0.4s ease-in;
+
+    }
+    .main {
+        margin-top: 5.1rem;
+    }
+}
