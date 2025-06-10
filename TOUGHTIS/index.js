@@ -5,7 +5,9 @@ import session from "express-session";
 import createFileStore from 'session-file-store';
 import path from "path";
 import os  from 'os';
-import toughtRouter from './routes/toughtRouter.js' // Routes
+
+import toughtRouter from './routes/toughtRouter.js'; // Routes
+import authRoutes from './routes/authRoutes.js'; //Routes
 import conn from './db/conn.js'; //Banco
 import Tought from "./models/Tought.js"; // models
 import User from './models/User.js'; // models
@@ -64,9 +66,11 @@ app.use((req, res, next)=> {
 
 //Routes
 app.use('/toughts', toughtRouter);
+app.use('/', authRoutes);
 
 // exibi todos os pesamentos na pagina de inicair sem acessar o route
 app.get('/', ToughtController.showTought);
+
 
 conn.sync(
     // {force: true}
