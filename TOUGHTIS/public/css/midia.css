@@ -20,7 +20,7 @@
 
     .auth-conteiner {
         padding: 1.5rem;
-        width: 60vw;
+        width: 40vw;
     }
     .auth-conteiner label {
         font-size: 0.9rem;
@@ -31,12 +31,13 @@
 }
 
 
-@media(max-width: 920px) {
+@media(max-width: 1007px) {
     .navBar{
         height: 4rem;
         font-size: 0.8rem;
         transition: 0.5s ease;
         gap: 0;
+       
     }
     .logoIMG {
         width: 50px;
@@ -53,7 +54,7 @@
 
     .auth-conteiner {
         padding: 1.5rem;
-        width: 60vw;
+        width: 40vw;
     }
     .auth-conteiner label {
         font-size: 0.9rem;
@@ -65,7 +66,7 @@
     
 }
 
-@media(max-width: 660px) {
+@media(max-width: 667px) {
     .navBar {
         height: 3rem;
         gap: 0;
@@ -89,7 +90,7 @@
 
     .auth-conteiner {
         padding: 1.5rem;
-        width: 60vw;
+        width: 56vw;
     }
     .auth-conteiner label {
         font-size: 0.9rem;
