@@ -1,6 +1,5 @@
 import express from "express";
 import {engine} from 'express-handlebars';
-import flash from "express-flash";
 import session from "express-session";
 import createFileStore from 'session-file-store';
 import path from "path";
@@ -52,19 +51,21 @@ app.use(
     })
 )
 
-//flash messages
-app.use(flash());
+
 
 //set session 
 app.use((req, res, next)=> {
-    if(req.session.userId) {
-        res.locals.session = req.session;
-    };
+    res.locals.session = req.session;
 
+    if(req.session.message) {
+        res.locals.message = req.session.message;
+        delete req.session.message;  // para variáveis de sessão
+    };
     next();
 })
 
 //Routes
+app.post('/register', authRoutes);
 app.use('/toughts', toughtRouter);
 app.use('/', authRoutes);
 

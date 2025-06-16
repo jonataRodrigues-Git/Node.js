@@ -16,10 +16,14 @@ const User = db.define('User', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
             notEmpty: {
                 msg : 'Campo Obrigatorio',
             },
+            isEmail: {
+                msg: 'Formato de e-mail inválido'
+            }
         },
     },
     password: {

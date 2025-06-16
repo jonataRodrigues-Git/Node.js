@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 
 const sequelizeDB = new Sequelize('toughtis', 'root', '', {
     host: 'localhost',
-    dialect: 'mysql'
+    dialect: 'mysql',
 });
 
 (async ()=> {

@@ -1,58 +1,73 @@
-document.addEventListener("submit", (event) => {
+// Função de verificação
+async function checkEmailExists(email) {
+  const response = await fetch('/check-email', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  });
 
-  const form = event.target;
+  const data = await response.json();
+  return data.exists;
+}
 
-  if(form.id === 'formLogin') {
+// Event Listener principal
+document.getElementById('formRegister').addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    event.preventDefault();
+  const form = e.target;
 
-    const emailConfig = document.getElementById("emailConfig").value.trim();
-    const passwordConfig = document.getElementById("passwordConfig").value.trim();
+  const nameUser = document.getElementById("nameRegister").value.trim();
+  const emailUser = document.getElementById("emailConfigRegister").value.trim();
+  const passwordUser  = document.getElementById("passwordRegister").value.trim();
+  const passwordUserConfirma  = document.getElementById("passwordConfigRegister").value.trim();
 
-    if (!emailConfig || !passwordConfig) {
-      configMsg("Campo Obrigatorio", "#dc2626");
-      return;
-    }
-  
-    configMsg(" Carregando !", "#22c55e");
+  if (!nameUser || !emailUser || !passwordUser || !passwordUserConfirma ) {
+    showToast("Campo Obrigatorio", "error");
+    return;
+  } 
+
+  if(passwordUser.length  < 8 ) {
+    showToast('Senha deve ter mais de 8 Caracteres', 'error');
+    return;
   }
 
-  if(form.id === 'formRegister') {
-    event.preventDefault();
+  if(passwordUser !== passwordUserConfirma ) {
+    showToast('Senha Não Coincide, Tente Novamente', 'error');
+    return;
+  } 
 
-    const nameUser = document.getElementById("nameRegister").value.trim();
-    const emailUser = document.getElementById("emailConfigRegister").value.trim();
-    const passwordUser = document.getElementById("paswordRegister").value.trim();
-    const passwordUserConfimra = document.getElementById("passwordConfiRegirter").value.trim();
+  const exists = await checkEmailExists(emailUser);
 
-    if (!nameUser || !emailUser || !passwordUser || !passwordUserConfimra) {
-      configMsg("Compo Obrigatorio", "#dc2626");
-      return;
-    } 
-
-    if(passwordUser.length  < '8' ) {
-      configMsg('Senha deve ter mais de 8 Caracteres', '#dc2626');
-      return;
-    }
-
-    if(passwordUser !== passwordUserConfimra) {
-      configMsg('Senha Não Coincide, Tente Novamente', '#dc2626');
-      return;
-    } 
-
-    configMsg("Registrado", "#22c55e");
+  if (exists) {
+    showToast("Email já cadastrado!", "error");
+    return;
   }
 
+  showToast("Usuário Cadastrado com Sucesso ! ... ", "success");
+
+  setTimeout(() => {
+    form.submit();
+  }, 2000);
 });
 
-function configMsg(text, background) {
+
+function showToast(text, type = 'success') {
+
+    const toastColors= {
+        success: '#361efc',
+        error: '#dc2626'
+    };
+
   Toastify({
     text: text,
     duration: 2000,
     position: "center",
     style: {
-      background: background,
+      background: toastColors[type],
       boxShadow: "none",
     },
   }).showToast();
+
 }
