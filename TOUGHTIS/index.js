@@ -17,7 +17,13 @@ const app = express();
 
 
 //template engine
-app.engine('handlebars', engine());
+app.engine('handlebars', engine({
+  helpers: {
+    json: function(context) {
+      return JSON.stringify(context);
+    }
+  }
+}));
 app.set('view engine', 'handlebars');
 
 //resceber resposta do body

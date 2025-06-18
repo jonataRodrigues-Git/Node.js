@@ -27,8 +27,13 @@
                         <a href="/">Pensamentos</a>
                     </li>
                         {{!-- URL apos autenticação --}}
-                    <li><a href="/login">Entrar</a></li>
-                    <li><a href="/register">Registrar</a></li>
+                    {{#if session.user.id}}
+                        <li><a href="/tougths/dashboard">Crie Seu Pensamento</a></li>
+                        <li><a href="/logout">Sair</a></li>
+                    {{else}}
+                        <li><a href="/login">Entrar</a></li>
+                        <li><a href="/register">Registrar</a></li>
+                    {{/if}}
                 </ul>
             </nav>
             <main class="main">
@@ -40,6 +45,11 @@
                 <span>Tougths</span> &copf; 2024;
             </footer>
         </div>
+        
+    {{!-- Passa a mensagem da sessão para o front em JSON --}}
+    <script>
+        window.messageFromServer = {{{json message}}} || null;
+    </script>
 
     {{!-- Toastify JS --}}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>

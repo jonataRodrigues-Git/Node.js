@@ -1,13 +1,60 @@
+import { text } from "express";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 
 export default class AuthController {
-  static login(req, res) {
-    res.render("auth/login");
-  }
   
+  static login(req, res) {
+    const message = req.session.message || null;
+    req.session.message = null; // limpa a mensagem para não repetir
+    
+    res.render("auth/login", { message }); 
+  };
   static register(req, res) {
-    res.render("auth/register");
+    const message = req.session.message || null;
+    req.session.message = null;
+   
+    res.render("auth/register", { message });
+  };
+
+
+  //verifi login
+  static async loginUserPost(req ,res) {
+    try {
+      
+      const { email, password} = req.body;
+      const checkEmail = await User.findOne({where: {email: email}});
+
+      if(!checkEmail) {
+        req.session.message = {
+          type: "error",
+          text: "Email não cadastrado!",
+        };
+        
+        return res.render('auth/login');
+      }
+
+      //verif passwor
+      const passwordMatch = await bcrypt.compare(password, checkEmail.password);//verif passwor criptografada
+      if(!passwordMatch) {
+        req.session.message = {
+          type: 'error',
+          text: 'Senha Incorreta'
+        };
+        return res.render('auth/login');
+      };
+
+      req.session.userid = checkEmail.id;
+      req.session.message = {
+        type: "success",
+        text: "Login Realizado com Sucesso!",
+      };
+
+      return res.redirect("/");
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send('Erro interno no servidor');
+    }
   }
 
   // Rota POST /register — cadastro completo
@@ -38,17 +85,33 @@ export default class AuthController {
         return res.redirect("/register");
       }
 
-      const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hashSync(password, salt);
+      //creat a  password
+      const salt = bcrypt.genSaltSync(10);//criptografia da senha 
+      const hashedPassword = bcrypt.hashSync(password, salt);// dificudando a mais a senha
 
-      await User.create({ name, email, password: hashedPassword });
+      //create obj Usuer no banco
+      const createUser =  await User.create({
+        name, 
+        email, 
+        password: hashedPassword 
+      });
+      
+      req.session.user = {
+        id: createUser.id,
+        name: createUser.name,
+        email: createUser.email,
+      };
 
+      req.session.user.id = createUser.id;
+
+      //maessade sucess
       req.session.message = {
         type: "success",
         text: "Usuário cadastrado com sucesso!",
       };
 
-      return res.redirect("/login");
+
+      return res.redirect("/");
 
     } catch (error) {
 
@@ -64,7 +127,7 @@ export default class AuthController {
 
   // Rota POST /check-email — só checa se email existe
   static async checkEmailExists(req, res) {
-
+    
     try {
 
       const { email } = req.body;
@@ -77,5 +140,11 @@ export default class AuthController {
       console.error(error);
       return res.status(500).json({ exists: false });
     }
+  }
+
+  //deslogar usuario
+  static logout(req, res) {
+    req.session.destroy();
+    res.redirect('/login');
   }
 }

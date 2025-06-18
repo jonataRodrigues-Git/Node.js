@@ -1,15 +1,16 @@
 <div class="auth-conteiner">
     <h2>Login</h2>
 
-    <form action="/login" method="post" id="formLogin">
+    <form action="/login" method="POST" id="formLogin">
         <div class="form-control">
             <label for="email">Usuario</label>
-            <input type="email" name="email" placeholder="Digiteu seu Usuario" id="emailConfig">
+            <input type="email" name="email" placeholder="Digiteu seu Usuario" id="emailConfigLogin">
         </div>
         <div class="form-control">
             <label for="password">Digite Sua Senha</label>
-            <input type="password" name="password" placeholder="Digete a senha" id="passwordConfig">
+            <input type="password" name="password" placeholder="Digete a senha" id="passwordConfigLogin">
         </div>
         <input type="submit" value="Login" class="submit">
+        <p class="form-btn-login">Não Tem Conta ? <a href="/register">Cliqe Aqui !</a></p>
     </form>
 </div>
